@@ -21,7 +21,7 @@ tree_dat %>%
 4188
 total = 13033 + 4188
  print (total)
-Answer: 17221 
+Answer: there are a combined 17221 records of the two species collected 
 
 Question 4: How many trees are older then 200 years old in the last year of the dataset?
 year_last <- tree_dat |>
@@ -31,13 +31,14 @@ print(year_last)
 year_last|>
   filter(age > 200)|>
   tally()
-Answer: 7 
+Answer: there are  7 trees older then 200 years old recorded in the past year 
 
 Question 5: What is the oldest tree in the dataset found using slice_max?
 tree_dat|>
   arrange(age)|>
   slice_max(age)
-Answer: 269 years 
+
+Answer: the oldest tree is 269 years old  
 
 Question 6: Find the oldest 5 trees recorded in 2001. Use the help docs to understand optional parameters
 
@@ -51,7 +52,7 @@ tree_dat |>
   filter(year == 2002) |>
   slice_sample(prop = 0.3)|>
   tally()
-Answer: 687
+Answer: there are 687 trees in 30% of the recorded trees in 2007 
 
 Question 8:Filter all trees in stand 5 in 2007. Sort this subset by descending radius at breast height (rad_ib) and use slice_head() to get the top three trees. Report the tree IDs
 tree_dat|>
@@ -59,7 +60,7 @@ tree_dat|>
   arrange(desc(rad_ib))|>
   slice_head(n = 3)
   
-Answer: 128, 135, 157
+Answer: the top 3 tree ID's of the top 3 trees radius at breast height are 128, 135, 157 respectively 
 
 Question 9: Reduce your full data.frame to [treeID, stand, year, and radius at breast height]. Filter to only those in stand 3 with records from 2007, and use slice_min to pull the smallest three trees meaured that year.
 tree_dat|>
@@ -67,14 +68,14 @@ tree_dat|>
   filter(year == 2007, standID == 3)|>
   slice_min(rad_ib, n =3 )
 
-Answer: 47.4, 48.4, 54.9
+Answer: the three smallest trees measured in 2007 had a radius of breast of 47.4, 48.4, 54.9 respectively 
 
 Question 10: Use select to remove the stand column. Use glimspe to show the dataset.
 info = tree_dat %>%
          select(!stand)
 glimpse(info)
 
-Answer:$
+Answer: This graph shows every column except for stand 
 treeID  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
 $ standID <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
 $ year    <dbl> 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, …
@@ -89,7 +90,7 @@ inclusion = tree_dat |>
   select(contains("ID"))
 glimpse(inclusion)
 
-Answer:
+Answer:The answer below shows all colums containing ID
 $ treeID  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
 $ standID <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
 
@@ -99,7 +100,7 @@ inclusion = tree_dat |>
   select(contains("ID") | ('stand'))
 glimpse(inclusion)
 
-Answer:
+Answer: The graph below shows the 3 desired columns and nothing else
 $ treeID  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
 $ standID <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
 $ stand   <chr> "A1", "A1", "A1", "A1", "A1", "A1", "A1", "A1", "A1", "A1"
@@ -122,5 +123,5 @@ tf <- tree_dat|>
   filter(species == 'POTR',year == (2007))
   mean(tf$BA_M2)
 
-Answer: 0.9241546
+Answer: The mean BA_m2 of the species: 0.9241546
 ```
