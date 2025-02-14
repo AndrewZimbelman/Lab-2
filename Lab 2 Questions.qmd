@@ -1,0 +1,126 @@
+---
+title: "Lab 2"
+format: html
+editor: visual
+---
+
+```         
+Question 2: How many records have been made in Stand 1?
+tree_dat %>%
+  filter (standID == 1) %>%
+  tally () 
+  Answer: 979 
+Question 3: How many records of the Abies balsamea and Pinus strobus species have been made?
+tree_dat%>% 
+  filter (species == "ABBA")%>%
+  tally()
+  13033
+tree_dat %>%
+  filter(species == "PIST")%>%
+  tally()
+4188
+total = 13033 + 4188
+ print (total)
+Answer: 17221 
+
+Question 4: How many trees are older then 200 years old in the last year of the dataset?
+year_last <- tree_dat |>
+  filter(year == max(year))
+print(year_last)
+
+year_last|>
+  filter(age > 200)|>
+  tally()
+Answer: 7 
+
+Question 5: What is the oldest tree in the dataset found using slice_max?
+tree_dat|>
+  arrange(age)|>
+  slice_max(age)
+Answer: 269 years 
+
+Question 6: Find the oldest 5 trees recorded in 2001. Use the help docs to understand optional parameters
+
+tree_dat |>
+  filter(year == 2001)|>
+  slice_max(age, n=5)
+Answer: 206, 206, 212, 259, 263
+
+Question 7: Question 7: Using slice_sample, how many trees are in a 30% sample of those recorded in 2002?
+tree_dat |>
+  filter(year == 2002) |>
+  slice_sample(prop = 0.3)|>
+  tally()
+Answer: 687
+
+Question 8:Filter all trees in stand 5 in 2007. Sort this subset by descending radius at breast height (rad_ib) and use slice_head() to get the top three trees. Report the tree IDs
+tree_dat|>
+  filter(year == 2007, standID == 5)|>
+  arrange(desc(rad_ib))|>
+  slice_head(n = 3)
+  
+Answer: 128, 135, 157
+
+Question 9: Reduce your full data.frame to [treeID, stand, year, and radius at breast height]. Filter to only those in stand 3 with records from 2007, and use slice_min to pull the smallest three trees meaured that year.
+tree_dat|>
+  select(treeID,standID,year,rad_ib)|>
+  filter(year == 2007, standID == 3)|>
+  slice_min(rad_ib, n =3 )
+
+Answer: 47.4, 48.4, 54.9
+
+Question 10: Use select to remove the stand column. Use glimspe to show the dataset.
+info = tree_dat %>%
+         select(!stand)
+glimpse(info)
+
+Answer:$
+treeID  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ standID <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ year    <dbl> 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, …
+$ species <chr> "ABBA", "ABBA", "ABBA", "ABBA", "ABBA", "ABBA", "ABBA", "ABB…
+$ age     <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1…
+$ inc     <dbl> 0.930, 0.950, 0.985, 0.985, 0.715, 0.840, 0.685, 0.940, 1.16…
+$ rad_ib  <dbl> 10.78145, 11.73145, 12.71645, 13.70145, 14.41645, 15.25645,
+
+Question 11: Look at the help document for dplyr::select and examine the “Overview of selection features”. Identify an option (there are multiple) that would help select all columns with the string “ID” in the name. Using glimpse to view the remaining dataset
+
+inclusion = tree_dat |>
+  select(contains("ID"))
+glimpse(inclusion)
+
+Answer:
+$ treeID  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
+$ standID <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
+
+Question 12: Find a selection pattern that captures all columns with either ‘ID’ or ‘stand’ in the name. Use glimpse to verify the selection.
+
+inclusion = tree_dat |>
+  select(contains("ID") | ('stand'))
+glimpse(inclusion)
+
+Answer:
+$ treeID  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ standID <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ stand   <chr> "A1", "A1", "A1", "A1", "A1", "A1", "A1", "A1", "A1", "A1"
+
+Question 13: Looking back at the data dictionary, rename rad_inc and inc to include _[unit] in the name. Unlike earlier options, be sure that this renaming is permanent, and stays with your data.frame (e.g. <-). Use glimpse to view your new data.frame.
+tree_dat 
+  tree_dat = tree_dat |>
+  rename(rad_ib_unit = rad_ib)|>
+  rename(inc_unit = inc)
+
+Question 14: A key measurement in forestry in “basal area column”. The metric is computed with the formula:
+BA(m2) = 0.00007854⋅DBH^2
+Where DBH is the diameter at breast height (cm). Use mutate to compute DBH in centimeters, and BA in m2 (HINT: Make sure rad_ib is in cm prior to computing the diameter!). What is the mean BA_m2 of the the species POTR in 2007
+
+ tree_dat|>
+mutate(rad_ib_unit = rad_ib_unit * 10) 
+
+tf <- tree_dat|>
+  mutate(BA_M2 = 0.00007854*((rad_ib_unit)^2))|>
+  filter(species == 'POTR',year == (2007))
+  mean(tf$BA_M2)
+
+Answer: 0.9241546
+```
