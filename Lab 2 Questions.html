@@ -34,6 +34,35 @@ ul.task-list li input[type="checkbox"] {
 <link href="Lab 2 Questions_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="Lab 2 Questions_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -62,206 +91,66 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<pre><code>Question 2: How many records have been made in Stand 1?
-tree_dat %&gt;%
-  filter (standID == 1) %&gt;%
-  tally () 
-  Answer: 979 
-Question 3: How many records of the Abies balsamea and Pinus strobus species have been made?
-tree_dat%&gt;% 
-  filter (species == "ABBA")%&gt;%
-  tally()
-  13033
-tree_dat %&gt;%
-  filter(species == "PIST")%&gt;%
-  tally()
-4188
-total = 13033 + 4188
- print (total)
-Answer: there are a combined 17221 records of the two species collected 
-
-Question 4: How many trees are older then 200 years old in the last year of the dataset?
-year_last &lt;- tree_dat |&gt;
-  filter(year == max(year))
-print(year_last)
-
-year_last|&gt;
-  filter(age &gt; 200)|&gt;
-  tally()
-Answer: there are  7 trees older then 200 years old recorded in the past year 
-
-Question 5: What is the oldest tree in the dataset found using slice_max?
-tree_dat|&gt;
-  arrange(age)|&gt;
-  slice_max(age)
-
-Answer: the oldest tree is 269 years old  
-
-Question 6: Find the oldest 5 trees recorded in 2001. Use the help docs to understand optional parameters
+<p>```<br>
+Question 2: How many records have been made in Stand 1? tree_dat %&gt;% filter (standID == 1) %&gt;% tally () Answer: 979 Question 3: How many records of the Abies balsamea and Pinus strobus species have been made? tree_dat%&gt;% filter (species == “ABBA”)%&gt;% tally() 13033 tree_dat %&gt;% filter(species == “PIST”)%&gt;% tally() 4188 total = 13033 + 4188 print (total) Answer: there are a combined 17221 records of the two species collected</p>
+<p>Question 4: How many trees are older then 200 years old in the last year of the dataset? year_last &lt;- tree_dat |&gt; filter(year == max(year)) print(year_last)</p>
+<p>year_last|&gt; filter(age &gt; 200)|&gt; tally() Answer: there are 7 trees older then 200 years old recorded in the last year</p>
+<p>Question 5: What is the oldest tree in the dataset found using slice_max? tree_dat|&gt; arrange(age)|&gt; slice_max(age)</p>
+<p>Answer: the oldest tree is 269 years old</p>
+<p>Question 6: Find the oldest 5 trees recorded in 2001. Use the help docs to understand optional parameters</p>
+<p>tree_dat |&gt; filter(year == 2001)|&gt; slice_max(age, n=5) Answer: 206, 206, 212, 259, 263</p>
+<p>Question 7: Question 7: Using slice_sample, how many trees are in a 30% sample of those recorded in 2002? tree_dat |&gt; filter(year == 2002) |&gt; slice_sample(prop = 0.3)|&gt; tally() Answer: there are 687 trees in 30% of the recorded trees in 2007</p>
+<p>Question 8:Filter all trees in stand 5 in 2007. Sort this subset by descending radius at breast height (rad_ib) and use slice_head() to get the top three trees. Report the tree IDs tree_dat|&gt; filter(year == 2007, standID == 5)|&gt; arrange(desc(rad_ib))|&gt; slice_head(n = 3)</p>
+<p>Answer: the top 3 tree ID’s of the top 3 trees radius at breast height are 128, 135, 157 respectively</p>
+<p>Question 9: Reduce your full data.frame to [treeID, stand, year, and radius at breast height]. Filter to only those in stand 3 with records from 2007, and use slice_min to pull the smallest three trees meaured that year. tree_dat|&gt; select(treeID,standID,year,rad_ib)|&gt; filter(year == 2007, standID == 3)|&gt; slice_min(rad_ib, n =3 )</p>
+<p>Answer: the three smallest trees measured in 2007 had a radius of breast of 47.4, 48.4, 54.9 respectively</p>
+<p>Question 10: Use select to remove the stand column. Use glimspe to show the dataset. info = tree_dat %&gt;% select(!stand) glimpse(info)</p>
+<p>Answer: This graph shows every column except for stand treeID <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, … $ standID <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, … $ year <dbl> 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, … $ species <chr> “ABBA”, “ABBA”, “ABBA”, “ABBA”, “ABBA”, “ABBA”, “ABBA”, “ABB… $ age <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1… $ inc <dbl> 0.930, 0.950, 0.985, 0.985, 0.715, 0.840, 0.685, 0.940, 1.16… $ rad_ib <dbl> 10.78145, 11.73145, 12.71645, 13.70145, 14.41645, 15.25645,</dbl></dbl></dbl></chr></dbl></dbl></dbl></p>
+<p>Question 11: Look at the help document for dplyr::select and examine the “Overview of selection features”. Identify an option (there are multiple) that would help select all columns with the string “ID” in the name. Using glimpse to view the remaining dataset</p>
+<p>inclusion = tree_dat |&gt; select(contains(“ID”)) glimpse(inclusion)</p>
+<p>Answer:The answer below shows all colums containing ID $ treeID <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1… $ standID <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</dbl></dbl></p>
+<p>Question 12: Find a selection pattern that captures all columns with either ‘ID’ or ‘stand’ in the name. Use glimpse to verify the selection.</p>
+<p>inclusion = tree_dat |&gt; select(contains(“ID”) | (‘stand’)) glimpse(inclusion)</p>
+<p>Answer: The graph below shows the 3 desired columns and nothing else $ treeID <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, … $ standID <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, … $ stand <chr> “A1”, “A1”, “A1”, “A1”, “A1”, “A1”, “A1”, “A1”, “A1”, “A1”</chr></dbl></dbl></p>
+<p>Question 13: Looking back at the data dictionary, rename rad_inc and inc to include _[unit] in the name. Unlike earlier options, be sure that this renaming is permanent, and stays with your data.frame (e.g.&nbsp;&lt;-). Use glimpse to view your new data.frame.</p>
+<p>tree_dat = tree_dat |&gt; rename(rad_ib_unit = rad_ib)|&gt; rename(inc_unit = inc)</p>
+<p>Question 14: A key measurement in forestry in “basal area column”. The metric is computed with the formula: BA(m2) = 0.00007854⋅DBH^2 Where DBH is the diameter at breast height (cm). Use mutate to compute DBH in centimeters, and BA in m2 (HINT: Make sure rad_ib is in cm prior to computing the diameter!). What is the mean BA_m2 of the the species POTR in 2007</p>
+<p>tree_dat|&gt; mutate(rad_ib_unit = rad_ib_unit * 10) mutate tf &lt;- tree_dat|&gt; mutate(BA_M2 = 0.00007854*((rad_ib_unit)^2)) filter(species == ‘POTR’,year == (2007)) mean(tf$BA_M2)</p>
+<p>Answer: The mean BA_m2 of the species: 0.9241546</p>
+<p>Question 15: Lets say for the sake of our study, trees are not established until they are 5 years of age. Use if_else to add a boolean column to our dataset called established that is TRUE if the age is greater then 5 and FALSE if less then or equal to five. Once added, use count (see ?count) to determine how many records are from estabilshed trees?</p>
+<p>tree_dat_age = tree_dat|&gt; mutate(established = ifelse(age &gt; 5,“TRUE”,“FALSE”)) tree_dat_age |&gt; count(established == “TRUE”) Answer:122503 trees are older then 5 years old (established)</p>
+<p>Question 16: Use mutate and case_when to add a new column to you data.frame that classifies each tree into the proper DBH_class. Once done, limit your dataset to the year 2007 and report the number of each class with count.</p>
+<p>tree_dat &lt;- tree_dat|&gt; mutate(DBH = rad_ib_unit * 2) tree_dat &lt;- tree_dat|&gt;<br>
+mutate(DBH_class = case_when( DBH &lt; 2.5 ~ “seedling”, DBH &lt; 10 ~ “sapling”, DBH &lt; 30 ~ “pole”, DBH &gt;= 30 ~ “sawlog”, TRUE ~ “default_result”)) tree_dat_2007 = tree_dat|&gt; filter(year == 2007) tree_dat_2007 |&gt; count(DBH_class == “sapling”) tree_dat_2007 |&gt; count(DBH_class == “seedling”) tree_dat_2007 |&gt; count(DBH_class == “pole”) tree_dat_2007 |&gt; count(DBH_class == “sawlog”) tree_dat|&gt; filter(year == 2007) count(DBH_class == “sapling”)</p>
+<p>Answer: there were 0 trees in any of the classifications except for sawlog which had all 2291 trees in it.</p>
+<p>Question 17: Compute the mean DBH (in cm) and standard deviation of DBH (in cm) for all trees in 2007. Explain the values you found and their statistical meaning.</p>
+<p>filter(year == 2007)|&gt; mean(tree_dat<span class="math inline">\(DBH)
+  sd(tree_dat\)</span>DBH)</p>
+<p>answer: the mean tree diamter at breast height is around 115 centimeters which means that on average, trees from the data set that were recorded in 2007 have an average diameter of 115 centimeters. However, the data is relatively varied because the trees average diameter varies from around 64 cm less then and more then the mean diameter</p>
+<p>Question 18: Compute the per species mean tree age using only those ages recorded in 2003. Identify the three species with the oldest mean age.</p>
+<p>tree_dat_2003 = tree_dat |&gt; filter(year == 2003)|&gt; group_by(species)|&gt; summarize(mean_age = mean(age))|&gt; slice_max(mean_age, n = 3 ) Answer: The 3 largest mean’s for age in tree species: THOC, FRNI , PIST</p>
+<p>Question 19: In a single summarize call, find the number of unique years with records in the data set along with the first and last year recorded?</p>
+<p>tree_dat_unique = tree_dat |&gt; summarize(unique_years = n_distinct(year)) Answer: there are 111 unique years</p>
+<p>Question 20: Determine the stands with the largest number of unique years recorded. Report all stands with largest (or tied with the largest) temporal record. tree_stand_unique = tree_dat |&gt; group_by(stand)|&gt; summarize(unique_year = n_distinct(year)) a</p>
+<p>Answer: the stand with the largest number of unique years was A1 whcih was equal to the amoutn of unique years.</p>
+<p>Final Question: We are interested in the annual DBH growth rate of each species through time, but we only want to include trees with at least a 10 year growth record. To identify this, we need to idnetify the per year growth made by each tree, there total growth record, and then average that, and compute the standard deviation, across the species.</p>
+<pre><code>Use a combination of dplyr verbs to compute these values and report the 3 species with the fastest growth, and the 3 species with the slowest growth. (** You will need to use either lag() or diff() in your compuation. You can learn more about each in the Help pages)
 
 tree_dat |&gt;
-  filter(year == 2001)|&gt;
-  slice_max(age, n=5)
-Answer: 206, 206, 212, 259, 263
-
-Question 7: Question 7: Using slice_sample, how many trees are in a 30% sample of those recorded in 2002?
-tree_dat |&gt;
-  filter(year == 2002) |&gt;
-  slice_sample(prop = 0.3)|&gt;
-  tally()
-Answer: there are 687 trees in 30% of the recorded trees in 2007 
-
-Question 8:Filter all trees in stand 5 in 2007. Sort this subset by descending radius at breast height (rad_ib) and use slice_head() to get the top three trees. Report the tree IDs
-tree_dat|&gt;
-  filter(year == 2007, standID == 5)|&gt;
-  arrange(desc(rad_ib))|&gt;
-  slice_head(n = 3)
-  
-Answer: the top 3 tree ID's of the top 3 trees radius at breast height are 128, 135, 157 respectively 
-
-Question 9: Reduce your full data.frame to [treeID, stand, year, and radius at breast height]. Filter to only those in stand 3 with records from 2007, and use slice_min to pull the smallest three trees meaured that year.
-tree_dat|&gt;
-  select(treeID,standID,year,rad_ib)|&gt;
-  filter(year == 2007, standID == 3)|&gt;
-  slice_min(rad_ib, n =3 )
-
-Answer: the three smallest trees measured in 2007 had a radius of breast of 47.4, 48.4, 54.9 respectively 
-
-Question 10: Use select to remove the stand column. Use glimspe to show the dataset.
-info = tree_dat %&gt;%
-         select(!stand)
-glimpse(info)
-
-Answer: This graph shows every column except for stand 
-treeID  &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-$ standID &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-$ year    &lt;dbl&gt; 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, …
-$ species &lt;chr&gt; "ABBA", "ABBA", "ABBA", "ABBA", "ABBA", "ABBA", "ABBA", "ABB…
-$ age     &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1…
-$ inc     &lt;dbl&gt; 0.930, 0.950, 0.985, 0.985, 0.715, 0.840, 0.685, 0.940, 1.16…
-$ rad_ib  &lt;dbl&gt; 10.78145, 11.73145, 12.71645, 13.70145, 14.41645, 15.25645,
-
-Question 11: Look at the help document for dplyr::select and examine the “Overview of selection features”. Identify an option (there are multiple) that would help select all columns with the string “ID” in the name. Using glimpse to view the remaining dataset
-
-inclusion = tree_dat |&gt;
-  select(contains("ID"))
-glimpse(inclusion)
-
-Answer:The answer below shows all colums containing ID
-$ treeID  &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
-$ standID &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
-
-Question 12: Find a selection pattern that captures all columns with either ‘ID’ or ‘stand’ in the name. Use glimpse to verify the selection.
-
-inclusion = tree_dat |&gt;
-  select(contains("ID") | ('stand'))
-glimpse(inclusion)
-
-Answer: The graph below shows the 3 desired columns and nothing else
-$ treeID  &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-$ standID &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-$ stand   &lt;chr&gt; "A1", "A1", "A1", "A1", "A1", "A1", "A1", "A1", "A1", "A1"
-
-Question 13: Looking back at the data dictionary, rename rad_inc and inc to include _[unit] in the name. Unlike earlier options, be sure that this renaming is permanent, and stays with your data.frame (e.g. &lt;-). Use glimpse to view your new data.frame.
-
-tree_dat = tree_dat |&gt;
-  rename(rad_ib_unit = rad_ib)|&gt;
-  rename(inc_unit = inc)
-
-Question 14: A key measurement in forestry in “basal area column”. The metric is computed with the formula:
-BA(m2) = 0.00007854⋅DBH^2
-Where DBH is the diameter at breast height (cm). Use mutate to compute DBH in centimeters, and BA in m2 (HINT: Make sure rad_ib is in cm prior to computing the diameter!). What is the mean BA_m2 of the the species POTR in 2007
-
- tree_dat|&gt;
-mutate(rad_ib_unit = rad_ib_unit * 10) 
-mutate
-tf &lt;- tree_dat|&gt;
-  mutate(BA_M2 = 0.00007854*((rad_ib_unit)^2))
-  filter(species == 'POTR',year == (2007))
-  mean(tf$BA_M2)
-
-Answer: The mean BA_m2 of the species: 0.9241546
-
-Question 15: Lets say for the sake of our study, trees are not established until they are 5 years of age. Use if_else to add a boolean column to our dataset called established that is TRUE if the age is greater then 5 and FALSE if less then or equal to five. Once added, use count (see ?count) to determine how many records are from estabilshed trees?
-
-tree_dat_age = tree_dat|&gt; mutate(established = ifelse(age &gt; 5,"TRUE","FALSE"))
-tree_dat_age |&gt;
-  count(established == "TRUE")
-Answer:122503 trees are older then 5 years old (established) 
-Question 16: Use mutate and case_when to add a new column to you data.frame that classifies each tree into the proper DBH_class. Once done, limit your dataset to the year 2007 and report the number of each class with count.
-
-tree_dat &lt;- tree_dat|&gt;
-  mutate(DBH = rad_ib_unit * 2)
-tree_dat &lt;- tree_dat|&gt;  
-  mutate(DBH_class = case_when(
-         DBH &lt; 2.5 ~ "seedling",
-         DBH &lt; 10 ~ "sapling", 
-         DBH &lt; 30 ~ "pole",
-         DBH &gt;= 30 ~ "sawlog",
-         TRUE ~ "default_result")) 
-tree_dat_2007 = tree_dat|&gt;
-  filter(year == 2007)
-tree_dat_2007 |&gt;
-  count(DBH_class == "sapling")
-tree_dat_2007 |&gt; 
-  count(DBH_class == "seedling")
-tree_dat_2007 |&gt; 
-  count(DBH_class == "pole")
-tree_dat_2007 |&gt; 
-  count(DBH_class == "sawlog")
-tree_dat|&gt;
-    filter(year == 2007)
-    count(DBH_class == "sapling")
-
-
-  
-Answer: 
-there were 0 trees in any of the classifications except for sawlog which had all 2291 trees in it. 
-
-Question 17: Compute the mean DBH (in cm) and standard deviation of DBH (in cm) for all trees in 2007. Explain the values you found and their statistical meaning.
-
-
-  filter(year == 2007)|&gt;
-  mean(tree_dat$DBH)
-  sd(tree_dat$DBH)
-  
-answer: the mean tree diamter at breast height is around 115 centimeters which means that on average, trees from the data set that were recorded in 2007 have an average diameter of 115 centimeters. However, the data is relatively varied because the trees average diameter varies from around 64 cm less then and more then the mean diameter 
-
-Question 18:  Compute the per species mean tree age using only those ages recorded in 2003. Identify the three species with the oldest mean age.
-
-tree_dat_2003 = tree_dat |&gt;
-  filter(year == 2003)|&gt;
   group_by(species)|&gt;
-  summarize(mean_age = mean(age))|&gt;
-  slice_max(mean_age, n = 3 )
-Answer: The 3 largest meaan's for age in tree species: 
-THOC, FRNI , PIST
+  mutate(growth_rate = inc_unit - lag(inc_unit))
 
-Question 19: In a single summarize call, find the number of unique years with records in the data set along with the first and last year recorded?
-
-tree_dat_unique = tree_dat |&gt; 
-    summarize(unique_years = n_distinct(year))
-Answer: there are 111 unique years 
-
-Question 20: Determine the stands with the largest number of unique years recorded. Report all stands with largest (or tied with the largest) temporal record.
-tree_stand_unique = tree_dat |&gt; 
-    group_by(stand)|&gt;
-    summarize(unique_year = n_distinct(year))
-answer: the stand with the largest number of unique years was A1 whcih was equal to the amoutn of unique years. 
-
-Final Question: We are interested in the annual DBH growth rate of each species through time, but we only want to include trees with at least a 10 year growth record. To identify this, we need to idnetify the per year growth made by each tree, there total growth record, and then average that, and compute the standard deviation, across the species.
-  
-    Use a combination of dplyr verbs to compute these values and report the 3 species with the fastest growth, and the 3 species with the slowest growth. (** You will need to use either lag() or diff() in your compuation. You can learn more about each in the Help pages)
-
-tree_growth = tree_dat |&gt;
-  filter(age &gt;= 10) |&gt;
+species_growth = tree_dat |&gt;
   group_by(species)|&gt;
-  summarize(DBH_total_growth = sum(DBH),unique_year = n_distinct(year))
-#this code chunk did the part only taking trees older then 10 years old, it then grouped the species, and calculated the sum DBH of all years, as well as the amount of recorded years 
-yearly_growth = tree_growth|&gt;
-  group_by(species, DBH_total_growth, unique_year)|&gt;
-  summarize(growth_rate = DBH_total_growth / unique_year)
-# this code chunk did the part of taking the total growth of all years and dividing it by years recorded to get an average growth rate per year.</code></pre>
+  summarise(average_growth = mean(inc_unit, na.rm = TRUE))|&gt;
+  arrange(desc(average_growth))
+  
+slice_max(species_growth, average_growth, n = 3)
+slice_min(species_growth, average_growth, n = 3)
+Answer: The 3 tree species with the highest average growth are PIRE, PIBA AND POTR, the tree species with the lowest average growth are LALA, THOC, QURU
+
+
+</code></pre>
 
 </main>
 <!-- /main column -->
