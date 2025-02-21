@@ -101,8 +101,6 @@ species_growth = tree_dat |>
   
 slice_max(species_growth, average_growth, n = 3)
 slice_min(species_growth, average_growth, n = 3)
-Answer: The 3 tree species with the highest average growth are PIRE, PIBA AND POTR, the tree species with the lowest average growth are LALA, THOC, QURU
-
-
-
+Answer: The 3 tree species with the highest average growth are PIRE, PIBA AND POTR, the tree species with the lowest average growth are LALA, THOC, QURU 
+Done :) 
 ```
